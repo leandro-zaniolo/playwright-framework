@@ -1,28 +1,18 @@
 import { type Page, type Locator, expect } from '@playwright/test';
 
 export class HomePage {
-  readonly page: Page;
-
-  // Navigation
+  readonly practiceTitle: Locator;
   readonly navHome: Locator;
   readonly navAppointments: Locator;
   readonly navBilling: Locator;
-
-  // Practice info
-  readonly practiceTitle: Locator;
-
-  // Quick actions
   readonly manageAppointmentsButton: Locator;
   readonly manageBillingButton: Locator;
 
   constructor(page: Page) {
-    this.page = page;
-
+    this.practiceTitle = page.getByAltText('Acme Direct Care Practice');
     this.navHome = page.getByRole('link', { name: 'Home', exact: true });
     this.navAppointments = page.getByRole('link', { name: 'Appointments', exact: true });
     this.navBilling = page.getByRole('link', { name: 'Billing', exact: true });
-
-    this.practiceTitle = page.getByAltText('Acme Direct Care Practice');
     this.manageAppointmentsButton = page.getByRole('link', { name: 'Manage Appointments' });
     this.manageBillingButton = page.getByRole('link', { name: 'Manage Billing' });
   }

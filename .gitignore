@@ -4,6 +4,5 @@ test-results/
 playwright-report/
 blob-report/
 playwright/.cache/
-*.auth.json
-storage-state/
+.auth/
 .DS_Store

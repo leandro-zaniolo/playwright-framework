@@ -13,33 +13,42 @@ Test suite for the [Atlas Patient Hub](https://atlas.md/patient-hub), built as p
 - **Playwright** — UI automation and API testing
 - **TypeScript**
 - **dotenv** — environment-based credential management
-- **Playwright MCP** — browser exploration during test development
+- **GitHub Actions** — CI/CD pipeline
 
 ## Project Structure
 
 ```
 tests/
+  setup/
+    auth.setup.ts            # Login + save auth token and cookies
+  pages/
+    login.page.ts            # POM: login landing + OAuth form
+    home.page.ts             # POM: hub dashboard
+  helpers/
+    graphql.helper.ts        # Shared GraphQL request helper
   ui/
-    pages/
-      login.page.ts    # Login landing + OAuth form (Page Object)
-      home.page.ts     # Hub dashboard after login (Page Object)
-    login.spec.ts      # Login flow tests
-  api/                 # API/GraphQL tests (planned)
+    login.spec.ts            # UI: login landing page
+    home.spec.ts             # UI: hub dashboard validation
+  api/
+    patient.api.spec.ts      # API: patient, clinic, family
+    appointments.api.spec.ts # API: appointments, scheduling
+    billing.api.spec.ts      # API: invoices, balance, cards, banks
 ```
 
 ## Setup
 
 ```bash
 npm install
-npx playwright install chromium
+npx playwright install chrome
 ```
 
 Copy `.env.example` to `.env` and fill in your credentials:
 
 ```
-HUB_URL="https://atlas.atlasdevel5.com/hub/"
-USER_EMAIL="your-email@example.com"
-USER_PASSWORD="your-password"
+HUB_URL=https://atlas.atlasdevel5.com/hub/
+GRAPHQL_ENDPOINT=https://atlas.atlasdevel5.com/graphql_q91f/patient
+USER_EMAIL=your-email@example.com
+USER_PASSWORD=your-password-here
 ```
 
 ## Running Tests
@@ -53,37 +62,50 @@ npm run test:debug    # run in debug mode
 npm run report        # open HTML report
 ```
 
-## Current Coverage
+## CI/CD
 
-### UI Tests — Login (`login.spec.ts`)
+Tests run automatically via GitHub Actions on every push to `main` and on pull requests. The workflow:
 
-| Test | Status |
-|------|--------|
-| Should display the login landing page (Log In button, Create Account link) | Passing |
-| Should log in with valid credentials and land on the hub | Passing |
+1. Installs dependencies and Chrome
+2. Runs the full test suite (auth → UI → API)
+3. Uploads the Playwright HTML report as an artifact
 
-The login test validates the full OAuth flow:
-1. Navigate to the hub (redirects to `/hub/login`)
-2. Click "Log In" on the landing page
-3. Fill email and password on the OAuth form
-4. Wait for the callback redirect back to `/hub/`
-5. Verify the hub dashboard is loaded (nav links, practice logo, Manage Appointments/Billing buttons)
+Credentials are stored as GitHub repository secrets (`HUB_URL`, `GRAPHQL_ENDPOINT`, `USER_EMAIL`, `USER_PASSWORD`).
 
-## What's Next
+## Test Coverage
 
-- [ ] Appointment scheduling tests (golden path)
-- [ ] Billing & invoices tests
-- [ ] API/GraphQL validation tests
-- [ ] Test plan document
-- [ ] Process document
+### UI Tests (2 tests)
+
+| Test | What it validates |
+|------|-------------------|
+| Login landing page | Log In button and Create Account link are visible |
+| Hub dashboard | Practice info, navigation (Home/Appointments/Billing), Manage buttons |
+
+### API Tests (10 tests)
+
+| Test | What it validates |
+|------|-------------------|
+| Patient fields | id, first_name, last_name, birthdate, gender, user (id, name, email, phone) |
+| Clinic contract | name, address_1, address_2, city, state_abbr (2 chars), zip (5 digits), phone, email |
+| Patient family | Array of members with id, first_name, last_name, is_head_of_family |
+| Appointments list | Returns array |
+| Appointment contract | Valid datetime, doctor name (non-empty), patient id/name |
+| Self-schedule users | id, name, email (@), phone, scheduling options (how_far is numeric) |
+| Invoices contract | textual, date, current, amount (numeric), outstanding (numeric) |
+| Outstanding balance | amount is defined and numeric |
+| Credit cards contract | id, last4 (4 digits), type, exp_month (1-12), exp_year, is_hsa, is_autocharge |
+| Bank accounts contract | id, bank_name, account_holder_name, last4, status, is_autocharge |
 
 ## Progress Log
 
-### Day 1 — April 15, 2026
+### Day 1
 
 - Set up the project: Playwright, TypeScript, dotenv, environment config
 - Explored the staging app to understand the login flow and hub structure
-- Discovered the login is a two-step process: hub landing page → OAuth form (separate URL at `/users/login`)
+- Discovered the login is a two-step process: hub landing page → OAuth form
 - Built Page Object Model with `LoginPage` and `HomePage`
-- Implemented and stabilized 2 login tests (both passing)
-- Mapped the hub dashboard: Home, Appointments, Billing navigation; practice info; upcoming appointments; billing summary
+- Implemented and stabilized 2 UI tests (login landing, hub dashboard)
+- Discovered the GraphQL API endpoint and auth mechanism (token from cookies)
+- Built token caching to avoid unnecessary logins and rate limiting
+- Implemented 10 API tests covering patient, clinic, appointments, billing with full contract validation
+- Added CI/CD pipeline with GitHub Actions
