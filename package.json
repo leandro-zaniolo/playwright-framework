@@ -1,0 +1,32 @@
+{
+  "name": "entermotion",
+  "version": "1.0.0",
+  "description": "The Atlas Patient Hub // POC",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx playwright test",
+    "test:ui": "npx playwright test tests/ui",
+    "test:api": "npx playwright test tests/api",
+    "test:headed": "npx playwright test --headed",
+    "test:debug": "npx playwright test --debug",
+    "report": "npx playwright show-report"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/leandro-zaniolo/entermotion.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/leandro-zaniolo/entermotion/issues"
+  },
+  "homepage": "https://github.com/leandro-zaniolo/entermotion#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^25.6.0",
+    "dotenv": "^17.4.2",
+    "typescript": "^6.0.2"
+  }
+}

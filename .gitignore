@@ -1,0 +1,9 @@
+node_modules/
+.env
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+*.auth.json
+storage-state/
+.DS_Store
