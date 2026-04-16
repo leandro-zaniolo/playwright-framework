@@ -20,6 +20,7 @@ Test suite for the [Atlas Patient Hub](https://atlas.md/patient-hub), built as p
 ```
 docs/
   test-cases.md                          # Full test case matrix (27 cases)
+  process.md                             # Process, progress, and struggles
 tests/
   setup/
     auth.setup.ts                        # Login + save auth token and cookies
