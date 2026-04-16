@@ -12,12 +12,25 @@
 | TC-06 | Edge Case: Long Name Display | Verify UI stability with extremely long patient/doctor names. | 1. View the appointment list containing a very long doctor name. | The layout does not break; text stays within viewport bounds. | `appointments/long-name-display.spec.ts` |
 | TC-07 | No Slots Available | Verify the system's behavior when a selected professional has no available time slots. | 1. Navigate to the Appointments page. 2. Select "Amanda" in the Responsible dropdown. | The message "No slots available." is displayed. No time slots are clickable. | `appointments/no-slots-available.spec.ts` |
 
+## Billing Module
+
+| ID | Title | Description | Steps | Expected Result | Automated |
+|----|-------|-------------|-------|-----------------|-----------|
+| TC-20 | Billing Layout | Verify presence of essential Billing sections. | 1. Navigate to Billing page. | "Invoices", "Make a Payment", and "Credit Cards" sections are visible. | `billing/layout-validation.spec.ts` |
+| TC-21 | Success Payment | Process a $1 payment using an existing card. | 1. Select payment method. 2. Set amount to 1. 3. Click "Send Payment". 4. Click "Confirm and Process". | "Payment Completed Successfully" modal is displayed. | `billing/success-payment.spec.ts` |
+| TC-22 | Cancel Payment | Ensure cancellation works at the confirmation stage. | 1. Select payment method and amount. 2. Click "Send Payment". 3. On modal, click "Cancel". | Modal closes; user remains on Billing page. | `billing/cancel-payment.spec.ts` |
+| TC-23 | Missing Payment Method | Validate error when no card is selected. | 1. Set amount to 1. 2. Click "Send Payment" without selecting a method. | Error modal appears: "Please select a payment method". | `billing/missing-payment-method.spec.ts` |
+| TC-24 | Invalid Amount (Negative) | Validate error for values below the minimum threshold. | 1. Select payment method. 2. Enter "-1". 3. Click "Send Payment". | Error modal appears: "The amount must be at least $0.50". | `billing/invalid-amount.spec.ts` |
+| TC-25 | Add Card (Different) | Add a new card through "Pay with different card" link. | 1. Click "Pay with a different card". 2. Enter 4242 4242 4242 4242. 3. Set expiry (current year + 2). 4. Click "Add". | "Credit card added successfully" modal appears. | `billing/add-card-different.spec.ts` |
+| TC-26 | Add Card (Direct) | Add a new card via the dedicated button. | 1. Click "Add New Credit Card". 2. Enter valid card data (4242...). 3. Click "Add". | Card is added successfully. | `billing/add-card-direct.spec.ts` |
+| TC-27 | Delete Credit Cards | Verify deletion flow and clean up extras. | 1. Click delete icon on a card. 2. Click "Confirm". 3. Repeat until at most 2 cards remain. | Cards are deleted; success modal appears; list shows at most 2 cards. | `billing/delete-credit-card.spec.ts` |
+
 ## Login & Dashboard
 
 | ID | Title | Description | Steps | Expected Result | Automated |
 |----|-------|-------------|-------|-----------------|-----------|
 | TC-08 | Login Landing Page | Verify login page displays correctly. | 1. Navigate to the hub URL. | "Log In" button and "Create Account" link are visible. | `login/landing-page.spec.ts` |
-| TC-09 | Hub Dashboard | Verify dashboard loads after authentication. | 1. Log in. 2. Navigate to the hub. | Practice info, nav links (Home/Appointments/Billing), and Manage buttons are visible. | `login/dashboard.spec.ts` |
+| TC-09 | Home Page | Verify home page displays practice info, contact links, and billing. | 1. Log in. 2. Navigate to the hub. | Practice info, address (Google Maps link), phone/email/SMS links with correct hrefs, Billing card visible. | `home/home-page.spec.ts` |
 
 ## API — GraphQL Contract Validation
 

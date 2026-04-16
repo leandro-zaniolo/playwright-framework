@@ -19,7 +19,7 @@ Test suite for the [Atlas Patient Hub](https://atlas.md/patient-hub), built as p
 
 ```
 docs/
-  test-cases.md                          # Full test case matrix (19 cases)
+  test-cases.md                          # Full test case matrix (27 cases)
 tests/
   setup/
     auth.setup.ts                        # Login + save auth token and cookies
@@ -27,12 +27,14 @@ tests/
     login.page.ts                        # POM: login landing + OAuth form
     home.page.ts                         # POM: hub dashboard
     appointments.page.ts                 # POM: scheduling form + modals
+    billing.page.ts                      # POM: payments, cards, Stripe
   helpers/
     graphql.helper.ts                    # Shared GraphQL request helper
   ui/
     login/
       landing-page.spec.ts               # Login landing page
-      dashboard.spec.ts                  # Hub dashboard validation
+    home/
+      home-page.spec.ts                  # Practice info, contacts, billing
     appointments/
       navigation.spec.ts                 # TC-01: Home → Appointments nav
       schedule-happy-path.spec.ts        # TC-02: Full scheduling flow
@@ -41,6 +43,15 @@ tests/
       dismiss-modal.spec.ts              # TC-05: Dismiss error modal
       long-name-display.spec.ts          # TC-06: Long name edge case
       no-slots-available.spec.ts         # TC-07: No slots for professional
+    billing/
+      layout-validation.spec.ts          # TC-20: Billing sections visible
+      success-payment.spec.ts            # TC-21: $1 payment via Stripe
+      cancel-payment.spec.ts             # TC-22: Cancel at confirmation
+      missing-payment-method.spec.ts     # TC-23: No card selected error
+      invalid-amount.spec.ts             # TC-24: Negative amount error
+      add-card-different.spec.ts         # TC-25: Add via "different card"
+      add-card-direct.spec.ts            # TC-26: Add via dedicated button
+      delete-credit-card.spec.ts         # TC-27: Delete + cleanup extras
   api/
     patient/
       patient-fields.spec.ts             # TC-10: Patient fields contract
@@ -99,15 +110,16 @@ Credentials are stored as GitHub repository secrets (`HUB_URL`, `GRAPHQL_ENDPOIN
 
 ## Test Coverage
 
-**19 test cases** across UI and API — full matrix available in [`docs/test-cases.md`](docs/test-cases.md).
+**27 test cases** across UI and API — full matrix available in [`docs/test-cases.md`](docs/test-cases.md).
 
-### UI Tests (9 tests)
+### UI Tests (17 tests)
 
 | Area | Tests |
 |------|-------|
 | Login | Landing page validation |
-| Dashboard | Practice info, navigation, manage buttons |
+| Home | Practice info, address, contact links (tel/email/sms), billing card |
 | Appointments | Navigation, happy path, missing description, cancel, modal dismiss, long names, no slots |
+| Billing | Layout, success payment, cancel payment, missing method, invalid amount, add card (2 flows), delete + cleanup |
 
 ### API Tests (10 tests)
 
@@ -131,5 +143,6 @@ Credentials are stored as GitHub repository secrets (`HUB_URL`, `GRAPHQL_ENDPOIN
 - Implemented 10 API tests covering patient, clinic, appointments, billing with full contract validation
 - Added CI/CD pipeline with GitHub Actions (push, PR, nightly)
 - Added 7 appointment scheduling UI tests (TC-01 through TC-07)
+- Added 8 billing UI tests (TC-20 through TC-27) including Stripe card management
 - Restructured to feature-folder pattern with one spec file per test case
-- Created test case documentation (19 cases) in `docs/test-cases.md`
+- Created test case documentation (27 cases) in `docs/test-cases.md`
