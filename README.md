@@ -18,21 +18,43 @@ Test suite for the [Atlas Patient Hub](https://atlas.md/patient-hub), built as p
 ## Project Structure
 
 ```
+docs/
+  test-cases.md                          # Full test case matrix (19 cases)
 tests/
   setup/
-    auth.setup.ts            # Login + save auth token and cookies
+    auth.setup.ts                        # Login + save auth token and cookies
   pages/
-    login.page.ts            # POM: login landing + OAuth form
-    home.page.ts             # POM: hub dashboard
+    login.page.ts                        # POM: login landing + OAuth form
+    home.page.ts                         # POM: hub dashboard
+    appointments.page.ts                 # POM: scheduling form + modals
   helpers/
-    graphql.helper.ts        # Shared GraphQL request helper
+    graphql.helper.ts                    # Shared GraphQL request helper
   ui/
-    login.spec.ts            # UI: login landing page
-    home.spec.ts             # UI: hub dashboard validation
+    login/
+      landing-page.spec.ts               # Login landing page
+      dashboard.spec.ts                  # Hub dashboard validation
+    appointments/
+      navigation.spec.ts                 # TC-01: Home → Appointments nav
+      schedule-happy-path.spec.ts        # TC-02: Full scheduling flow
+      schedule-without-description.spec.ts # TC-03: Missing description error
+      cancel-scheduling.spec.ts          # TC-04: Cancel on confirmation modal
+      dismiss-modal.spec.ts              # TC-05: Dismiss error modal
+      long-name-display.spec.ts          # TC-06: Long name edge case
+      no-slots-available.spec.ts         # TC-07: No slots for professional
   api/
-    patient.api.spec.ts      # API: patient, clinic, family
-    appointments.api.spec.ts # API: appointments, scheduling
-    billing.api.spec.ts      # API: invoices, balance, cards, banks
+    patient/
+      patient-fields.spec.ts             # TC-10: Patient fields contract
+      clinic-contract.spec.ts            # TC-11: Clinic address/contact
+      family-members.spec.ts             # TC-12: Patient family members
+    appointments/
+      appointments-list.spec.ts          # TC-13: Appointments array
+      appointment-contract.spec.ts       # TC-14: Appointment data structure
+      self-schedule-users.spec.ts        # TC-15: Schedulable users
+    billing/
+      invoices-contract.spec.ts          # TC-16: Invoices contract
+      outstanding-balance.spec.ts        # TC-17: Outstanding balance
+      credit-cards-contract.spec.ts      # TC-18: Credit cards contract
+      bank-accounts-contract.spec.ts     # TC-19: Bank accounts contract
 ```
 
 ## Setup
@@ -77,27 +99,23 @@ Credentials are stored as GitHub repository secrets (`HUB_URL`, `GRAPHQL_ENDPOIN
 
 ## Test Coverage
 
-### UI Tests (2 tests)
+**19 test cases** across UI and API — full matrix available in [`docs/test-cases.md`](docs/test-cases.md).
 
-| Test | What it validates |
-|------|-------------------|
-| Login landing page | Log In button and Create Account link are visible |
-| Hub dashboard | Practice info, navigation (Home/Appointments/Billing), Manage buttons |
+### UI Tests (9 tests)
+
+| Area | Tests |
+|------|-------|
+| Login | Landing page validation |
+| Dashboard | Practice info, navigation, manage buttons |
+| Appointments | Navigation, happy path, missing description, cancel, modal dismiss, long names, no slots |
 
 ### API Tests (10 tests)
 
-| Test | What it validates |
-|------|-------------------|
-| Patient fields | id, first_name, last_name, birthdate, gender, user (id, name, email, phone) |
-| Clinic contract | name, address_1, address_2, city, state_abbr (2 chars), zip (5 digits), phone, email |
-| Patient family | Array of members with id, first_name, last_name, is_head_of_family |
-| Appointments list | Returns array |
-| Appointment contract | Valid datetime, doctor name (non-empty), patient id/name |
-| Self-schedule users | id, name, email (@), phone, scheduling options (how_far is numeric) |
-| Invoices contract | textual, date, current, amount (numeric), outstanding (numeric) |
-| Outstanding balance | amount is defined and numeric |
-| Credit cards contract | id, last4 (4 digits), type, exp_month (1-12), exp_year, is_hsa, is_autocharge |
-| Bank accounts contract | id, bank_name, account_holder_name, last4, status, is_autocharge |
+| Area | Tests |
+|------|-------|
+| Patient & Clinic | Patient fields, clinic address/contact, family members |
+| Appointments | List validation, contract per entry, self-schedule users |
+| Billing | Invoices, outstanding balance, credit cards, bank accounts |
 
 ## Progress Log
 
@@ -111,4 +129,7 @@ Credentials are stored as GitHub repository secrets (`HUB_URL`, `GRAPHQL_ENDPOIN
 - Discovered the GraphQL API endpoint and auth mechanism (token from cookies)
 - Built token caching to avoid unnecessary logins and rate limiting
 - Implemented 10 API tests covering patient, clinic, appointments, billing with full contract validation
-- Added CI/CD pipeline with GitHub Actions
+- Added CI/CD pipeline with GitHub Actions (push, PR, nightly)
+- Added 7 appointment scheduling UI tests (TC-01 through TC-07)
+- Restructured to feature-folder pattern with one spec file per test case
+- Created test case documentation (19 cases) in `docs/test-cases.md`

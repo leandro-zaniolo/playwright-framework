@@ -7,7 +7,6 @@ on:
     branches: [main]
   schedule:
     - cron: '0 3 * * 1-5'
-    - cron: '25 12 16 4 *'
   workflow_dispatch:
 
 env:

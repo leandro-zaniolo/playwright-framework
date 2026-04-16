@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '../pages/login.page';
+import { LoginPage } from '../../pages/login.page';
 
 // This test needs a clean browser — no saved auth
 test.use({ storageState: { cookies: [], origins: [] } });

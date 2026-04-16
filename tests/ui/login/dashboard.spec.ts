@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { HomePage } from '../pages/home.page';
+import { HomePage } from '../../pages/home.page';
 
 test.describe('Hub Dashboard', () => {
   test('should display practice info and navigation after login', async ({ page }) => {
