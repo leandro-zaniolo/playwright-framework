@@ -17,9 +17,6 @@ export default defineConfig({
     video: 'retain-on-failure',
     trace: 'on-first-retry',
     viewport: { width: 2000, height: 1080 },
-    launchOptions: {
-      args: ['--disable-blink-features=AutomationControlled'],
-    },
   },
 
   projects: [
