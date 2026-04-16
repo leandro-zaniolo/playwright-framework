@@ -24,7 +24,18 @@ setup('login and save auth', async ({ page, context }) => {
 
   if (!fs.existsSync(AUTH_DIR)) fs.mkdirSync(AUTH_DIR, { recursive: true });
 
+  console.log('HUB_URL:', process.env.HUB_URL);
+  console.log('USER_EMAIL:', process.env.USER_EMAIL ? 'set' : 'MISSING');
+
   const loginPage = new LoginPage(page);
+
+  await page.goto(process.env.HUB_URL!);
+  await page.waitForLoadState('networkidle');
+
+  console.log('Page URL after goto:', page.url());
+  console.log('Page title:', await page.title());
+  await page.screenshot({ path: 'test-results/debug-landing.png' });
+
   await loginPage.goto();
   await loginPage.login(process.env.USER_EMAIL!, process.env.USER_PASSWORD!);
 
