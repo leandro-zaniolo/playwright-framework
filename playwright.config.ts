@@ -6,7 +6,7 @@ dotenv.config();
 export default defineConfig({
   timeout: 60_000,
   retries: process.env.CI ? 1 : 0,
-  workers: 1,
+  workers: process.env.CI ? 6 : 7,
   reporter: [['list'], ['html', { open: 'never' }]],
 
   use: {

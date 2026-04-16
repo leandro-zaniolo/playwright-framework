@@ -53,8 +53,7 @@ export class BillingPage {
 
   async goto() {
     await this.page.goto(process.env.HUB_URL! + 'billing');
-    await this.page.waitForLoadState('networkidle');
-    await expect(this.makePaymentHeading).toBeVisible();
+    await expect(this.makePaymentHeading).toBeVisible({ timeout: 15_000 });
   }
 
   async selectPaymentMethod(optionText: string) {
