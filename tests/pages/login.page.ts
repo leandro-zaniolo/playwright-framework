@@ -22,6 +22,7 @@ export class LoginPage {
 
   async goto() {
     await this.page.goto(process.env.HUB_URL!);
+    await this.page.waitForLoadState('networkidle');
     await expect(this.loginButton).toBeVisible();
   }
 

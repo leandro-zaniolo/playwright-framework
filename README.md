@@ -64,11 +64,14 @@ npm run report        # open HTML report
 
 ## CI/CD
 
-Tests run automatically via GitHub Actions on every push to `main` and on pull requests. The workflow:
+Tests run automatically via GitHub Actions:
 
-1. Installs dependencies and Chrome
-2. Runs the full test suite (auth → UI → API)
-3. Uploads the Playwright HTML report as an artifact
+- On every **push** to `main`
+- On every **pull request** to `main`
+- **Nightly** at 3 AM UTC, weekdays only (Mon–Fri)
+- **Manually** via workflow dispatch
+
+The workflow installs dependencies and Chrome, runs the full suite (auth → UI → API), and uploads the Playwright HTML report as an artifact. On CI, tests get 1 retry to handle flaky network conditions.
 
 Credentials are stored as GitHub repository secrets (`HUB_URL`, `GRAPHQL_ENDPOINT`, `USER_EMAIL`, `USER_PASSWORD`).
 
