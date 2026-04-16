@@ -11,15 +11,15 @@ function getCardExpiry(): string {
   return `${month}${year}`;
 }
 
-// TC-13: Add Different Card via "Pay with different card"
+// TC-25: Add Different Card via "Pay with different card"
 test('should add a new card via Pay with different card link', async ({ page }) => {
   const billing = new BillingPage(page);
   await billing.goto();
 
   await billing.payWithDifferentCardLink.click();
-  await page.waitForLoadState('networkidle');
+  await expect(billing.addCardSubmitButton).toBeVisible();
 
-  await billing.fillStripeCard(CARD_NUMBER, getCardExpiry(), CARD_CVC);
+  await billing.fillCardForm(CARD_NUMBER, getCardExpiry(), CARD_CVC);
   await billing.addCardSubmitButton.click();
 
   await expect(page.getByText('Credit card added successfully')).toBeVisible();

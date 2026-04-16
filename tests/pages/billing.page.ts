@@ -66,17 +66,25 @@ export class BillingPage {
     await this.amountInput.fill(amount);
   }
 
-  async fillStripeCard(cardNumber: string, expiry: string, cvc: string) {
+  async fillCardForm(cardNumber: string, expiry: string, cvc: string) {
     const stripeFrames = this.page.locator('iframe[name*="privateStripeFrame"]');
+    const hasStripeIframes = await stripeFrames.count() > 0;
 
-    const cardFrame = this.page.frameLocator(`iframe[name="${await stripeFrames.nth(0).getAttribute('name')}"]`);
-    await cardFrame.locator('input[name="cardnumber"]').fill(cardNumber);
+    if (hasStripeIframes) {
+      const cardFrame = this.page.frameLocator(`iframe[name="${await stripeFrames.nth(0).getAttribute('name')}"]`);
+      await cardFrame.locator('input[name="cardnumber"]').fill(cardNumber);
 
-    const expiryFrame = this.page.frameLocator(`iframe[name="${await stripeFrames.nth(1).getAttribute('name')}"]`);
-    await expiryFrame.locator('input[name="exp-date"]').fill(expiry);
+      const expiryFrame = this.page.frameLocator(`iframe[name="${await stripeFrames.nth(1).getAttribute('name')}"]`);
+      await expiryFrame.locator('input[name="exp-date"]').fill(expiry);
 
-    const cvcFrame = this.page.frameLocator(`iframe[name="${await stripeFrames.nth(2).getAttribute('name')}"]`);
-    await cvcFrame.locator('input[name="cvc"]').fill(cvc);
+      const cvcFrame = this.page.frameLocator(`iframe[name="${await stripeFrames.nth(2).getAttribute('name')}"]`);
+      await cvcFrame.locator('input[name="cvc"]').fill(cvc);
+    } else {
+      const modal = this.page.locator('.modal.in');
+      await modal.locator('input[placeholder*="1234"]').fill(cardNumber);
+      await modal.locator('input[placeholder*="MM"]').fill(expiry);
+      await modal.locator('input[placeholder*="CVC"]').fill(cvc);
+    }
   }
 
   async deleteFirstCard() {

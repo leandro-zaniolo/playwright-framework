@@ -11,15 +11,15 @@ function getCardExpiry(): string {
   return `${month}${year}`;
 }
 
-// TC-14: Add New Card via dedicated button
+// TC-26: Add New Card via dedicated button
 test('should add a new card via Add New Credit Card button', async ({ page }) => {
   const billing = new BillingPage(page);
   await billing.goto();
 
   await billing.addNewCardButton.click();
-  await page.waitForLoadState('networkidle');
+  await expect(billing.addCardSubmitButton).toBeVisible();
 
-  await billing.fillStripeCard(CARD_NUMBER, getCardExpiry(), CARD_CVC);
+  await billing.fillCardForm(CARD_NUMBER, getCardExpiry(), CARD_CVC);
   await billing.addCardSubmitButton.click();
 
   await expect(page.getByText('Credit card added successfully')).toBeVisible();
