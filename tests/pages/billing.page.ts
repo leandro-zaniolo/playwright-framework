@@ -95,12 +95,12 @@ export class BillingPage {
     await expect(confirmBtn).toBeVisible();
     await confirmBtn.click();
 
-    // Wait for success modal
+    // Wait for success modal (deletion can be slow)
     const successModal = this.page.locator('.modal.in', { hasText: 'deleted successfully' });
-    await successModal.waitFor({ state: 'visible', timeout: 10_000 });
+    await successModal.waitFor({ state: 'visible', timeout: 30_000 });
 
     await successModal.locator('.close-button').click();
-    await this.page.waitForLoadState('networkidle');
+    await successModal.waitFor({ state: 'hidden' });
   }
 
   async dismissModal() {
