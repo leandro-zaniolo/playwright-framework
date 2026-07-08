@@ -1,4 +1,4 @@
-# Process Document — Atlas Patient Hub QA Assessment
+# Process Document — Playwright Framework
 
 ## Approach
 

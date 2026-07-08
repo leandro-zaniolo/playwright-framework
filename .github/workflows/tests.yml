@@ -1,4 +1,4 @@
-name: Atlas Patient Hub — Test Suite
+name: Playwright Framework — Test Suite
 
 on:
   push:

@@ -1,6 +1,8 @@
-# Atlas Patient Hub — Test Automation
+# Playwright Framework — Example Project
 
-Test suite for the [Atlas Patient Hub](https://atlas.md/patient-hub), built as part of the Entermotion QA Engineer assessment.
+Playwright test automation framework demonstrating UI and API testing patterns. This repository serves as a reference/template for building test suites with TypeScript, Page Object Model, and CI/CD.
+
+The example application under test is the [Atlas Patient Hub](https://atlas.md/patient-hub) (staging).
 
 ## Target Application
 
